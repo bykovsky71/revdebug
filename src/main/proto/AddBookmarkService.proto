@@ -1,0 +1,16 @@
+syntax = "proto3";
+option java_multiple_files = true;
+package com.revdebug.grpc;
+
+message AddBookmarkRequest {
+    string uri = 1;
+    string tags = 2;
+}
+
+message AddBookmarkResponse {
+    string response = 1;
+}
+
+service AddBookmarkService {
+    rpc addBookmark(AddBookmarkRequest) returns (AddBookmarkResponse);
+}
