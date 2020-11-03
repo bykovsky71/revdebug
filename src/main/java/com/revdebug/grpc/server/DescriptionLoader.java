@@ -24,9 +24,7 @@ public class DescriptionLoader {
 			if (urlContentSplitted[i].contains(DESCRIPTION_HEADER)) {
 				int contentIndex = urlContentSplitted[i].indexOf(CONTENT_HEADER) + CONTENT_HEADER_SIZE;
 				String content = urlContentSplitted[i].substring(contentIndex);
-				description = content.substring(0, urlContentSplitted[i].substring(contentIndex + CONTENT_HEADER_SIZE).indexOf("\"") +
-						CONTENT_HEADER_SIZE
-				);
+				description = content.substring(0, content.indexOf("\""));
 			}
 		}
 
