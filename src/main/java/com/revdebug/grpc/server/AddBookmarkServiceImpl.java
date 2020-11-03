@@ -26,29 +26,36 @@ public class AddBookmarkServiceImpl extends AddBookmarkServiceGrpc.AddBookmarkSe
 		System.out.println("Request received from client:\n" + request);
 
 		String uri = request.getUri();
-		if (!BookmarksLoader.uriAlreadyExists(uri)) {
-			String tags = request.getTags().replace(" ", ", ");
-			String description = DescriptionLoader.getDescription(uri);
-			Bookmark bookmark = new Bookmark(uri, tags, description);
-			BookmarkSaver.saveBookmark(bookmark);
-			sendUriSavedMessage(responseObserver);
+		if (uri.startsWith("http://") || uri.startsWith("https://")) {
+			if (!BookmarksLoader.uriAlreadyExists(uri)) {
+				String tags = request.getTags().replace(" ", ", ");
+				String description = DescriptionLoader.getDescription(uri);
+				Bookmark bookmark = new Bookmark(uri, tags, description);
+				BookmarkSaver.saveBookmark(bookmark);
+				sendUriSavedMessage(responseObserver);
+			} else {
+				sendUriAlreadyExistsMessage(responseObserver);
+			}
 		} else {
-			sendUriAlreadyExistsMessage(responseObserver);
+			sendInvalidUriMessage(responseObserver);
 		}
 	}
 
-	private void sendUriSavedMessage(StreamObserver<AddBookmarkResponse> responseObserver) {
-		AddBookmarkResponse response = AddBookmarkResponse.newBuilder()
-				.setResponse("Uri saved")
-				.build();
+	private void sendInvalidUriMessage(StreamObserver<AddBookmarkResponse> responseObserver) {
+		sendMessage(responseObserver, "Invalid uri");
+	}
 
-		responseObserver.onNext(response);
-		responseObserver.onCompleted();
+	private void sendUriSavedMessage(StreamObserver<AddBookmarkResponse> responseObserver) {
+		sendMessage(responseObserver, "Uri saved");
 	}
 
 	private void sendUriAlreadyExistsMessage(StreamObserver<AddBookmarkResponse> responseObserver) {
+		sendMessage(responseObserver, "Uri already exists");
+	}
+
+	private void sendMessage(StreamObserver<AddBookmarkResponse> responseObserver, String message) {
 		AddBookmarkResponse response = AddBookmarkResponse.newBuilder()
-				.setResponse("Uri already exists")
+				.setResponse(message)
 				.build();
 
 		responseObserver.onNext(response);
