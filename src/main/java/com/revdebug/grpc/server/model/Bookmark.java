@@ -6,14 +6,24 @@ package com.revdebug.grpc.server.model;
 
 public class Bookmark {
 
-	String uri;
-	String tags;
-	String description;
+	private String title;
+	private String uri;
+	private String tags;
+	private String description;
 
-	public Bookmark(String uri, String tags, String description) {
+	public Bookmark(String title, String uri, String tags, String description) {
+		this.title = title;
 		this.uri = uri;
 		this.tags = tags;
 		this.description = description;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public String getUri() {

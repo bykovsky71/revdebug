@@ -19,6 +19,7 @@ public class BookmarkSaver {
 				file.createNewFile();
 			}
 			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(BOOKMARKS_FILE, true)));
+			out.println("*title*: " + bookmark.getTitle());
 			out.println("*url*: " + bookmark.getUri());
 			out.println("*tags*: " + bookmark.getTags());
 			out.println("*description*: " + bookmark.getDescription());

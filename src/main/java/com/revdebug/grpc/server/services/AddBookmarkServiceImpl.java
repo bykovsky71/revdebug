@@ -7,6 +7,7 @@ import com.revdebug.grpc.server.model.Bookmark;
 import com.revdebug.grpc.server.utils.BookmarkSaver;
 import com.revdebug.grpc.server.utils.BookmarksLoader;
 import com.revdebug.grpc.server.utils.DescriptionLoader;
+import com.revdebug.grpc.server.utils.TitleLoader;
 
 import io.grpc.stub.StreamObserver;
 
@@ -26,7 +27,8 @@ public class AddBookmarkServiceImpl extends AddBookmarkServiceGrpc.AddBookmarkSe
 			if (!BookmarksLoader.uriAlreadyExists(uri)) {
 				String tags = formatTags(request);
 				String description = DescriptionLoader.getDescription(uri);
-				Bookmark bookmark = new Bookmark(uri, tags, description);
+				String title = TitleLoader.getTitle(uri);
+				Bookmark bookmark = new Bookmark(title, uri, tags, description);
 				BookmarkSaver.saveBookmark(bookmark);
 				sendUriSavedMessage(responseObserver);
 			} else {
