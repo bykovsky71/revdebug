@@ -1,5 +1,6 @@
 package com.revdebug.grpc.server;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -25,32 +26,15 @@ public class AddBookmarkServiceImpl extends AddBookmarkServiceGrpc.AddBookmarkSe
 		System.out.println("Request received from client:\n" + request);
 
 		String uri = request.getUri();
-		if (!uriAlreadyExists(uri)) {
-			String tags = request.getTags();
+		if (!BookmarksLoader.uriAlreadyExists(uri)) {
+			String tags = request.getTags().replace(" ", ", ");
 			String description = DescriptionLoader.getDescription(uri);
 			Bookmark bookmark = new Bookmark(uri, tags, description);
-			saveBookmark(bookmark);
+			BookmarkSaver.saveBookmark(bookmark);
 			sendUriSavedMessage(responseObserver);
 		} else {
 			sendUriAlreadyExistsMessage(responseObserver);
 		}
-	}
-
-	private boolean uriAlreadyExists(String uri) {
-		List<Bookmark> bookmarks = loadBookmarks();
-		return bookmarks.stream().anyMatch(bookmark -> bookmark.getUri().equals(uri));
-	}
-
-	private void saveBookmark(Bookmark bookmark) {
-
-	}
-
-	private List<Bookmark> loadBookmarks() {
-		List<Bookmark> bookmarks = new ArrayList<>();
-
-
-
-		return bookmarks;
 	}
 
 	private void sendUriSavedMessage(StreamObserver<AddBookmarkResponse> responseObserver) {

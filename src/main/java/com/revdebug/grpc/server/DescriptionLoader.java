@@ -11,13 +11,22 @@ import java.util.Scanner;
 
 public class DescriptionLoader {
 
+	private static final String DESCRIPTION_HEADER = "name=\"description\"";
+	private static final String META_HEADER = "<meta";
+	private static final String CONTENT_HEADER = "content=\"";
+	private static final int CONTENT_HEADER_SIZE = 9;
+
 	public static String getDescription(String uri) {
 		String description = "";
 		String urlContent = getURLContent(uri);
-		String[] urlContentSplitted = urlContent.split("<meta content=");
+		String[] urlContentSplitted = urlContent.split(META_HEADER);
 		for (int i = 0; i < urlContentSplitted.length; i++) {
-			if (urlContentSplitted[i].contains("name=\"description\"")) {
-				description = urlContentSplitted[i].substring(1, urlContentSplitted[i].indexOf("\"", 1));
+			if (urlContentSplitted[i].contains(DESCRIPTION_HEADER)) {
+				int contentIndex = urlContentSplitted[i].indexOf(CONTENT_HEADER) + CONTENT_HEADER_SIZE;
+				description = urlContentSplitted[i].substring(
+						contentIndex,
+						urlContentSplitted[i].substring(contentIndex).indexOf("\"") + CONTENT_HEADER_SIZE
+				);
 			}
 		}
 

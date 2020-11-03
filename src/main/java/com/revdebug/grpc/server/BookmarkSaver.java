@@ -1,0 +1,29 @@
+package com.revdebug.grpc.server;
+
+import java.io.*;
+
+/**
+ * Created by Łukasz Rejment
+ */
+
+public class BookmarkSaver {
+
+	private static final String BOOKMARKS_FILE = "bookmarks.md";
+
+	public static void saveBookmark(Bookmark bookmark) {
+		try {
+			File file = new File(BOOKMARKS_FILE);
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(BOOKMARKS_FILE, true)));
+			out.println("*url*: " + bookmark.getUri());
+			out.println("*tags*: " + bookmark.getTags());
+			out.println("*description*: " + bookmark.getDescription());
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+}
