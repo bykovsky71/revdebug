@@ -1,4 +1,4 @@
-package com.revdebug.grpc.server;
+package com.revdebug.grpc.server.utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;

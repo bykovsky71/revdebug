@@ -1,4 +1,4 @@
-package com.revdebug.grpc.server;
+package com.revdebug.grpc.server.utils;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

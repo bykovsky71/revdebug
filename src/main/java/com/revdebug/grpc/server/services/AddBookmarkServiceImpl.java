@@ -1,16 +1,12 @@
-package com.revdebug.grpc.server;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+package com.revdebug.grpc.server.services;
 
 import com.revdebug.grpc.AddBookmarkServiceGrpc;
 import com.revdebug.grpc.AddBookmarkRequest;
 import com.revdebug.grpc.AddBookmarkResponse;
+import com.revdebug.grpc.server.model.Bookmark;
+import com.revdebug.grpc.server.utils.BookmarkSaver;
+import com.revdebug.grpc.server.utils.BookmarksLoader;
+import com.revdebug.grpc.server.utils.DescriptionLoader;
 
 import io.grpc.stub.StreamObserver;
 
@@ -26,9 +22,9 @@ public class AddBookmarkServiceImpl extends AddBookmarkServiceGrpc.AddBookmarkSe
 		System.out.println("Request received from client:\n" + request);
 
 		String uri = request.getUri();
-		if (uri.startsWith("http://") || uri.startsWith("https://")) {
+		if (hasValidUri(uri)) {
 			if (!BookmarksLoader.uriAlreadyExists(uri)) {
-				String tags = request.getTags().replace(" ", ", ");
+				String tags = formatTags(request);
 				String description = DescriptionLoader.getDescription(uri);
 				Bookmark bookmark = new Bookmark(uri, tags, description);
 				BookmarkSaver.saveBookmark(bookmark);
@@ -39,6 +35,14 @@ public class AddBookmarkServiceImpl extends AddBookmarkServiceGrpc.AddBookmarkSe
 		} else {
 			sendInvalidUriMessage(responseObserver);
 		}
+	}
+
+	private boolean hasValidUri(String uri) {
+		return uri.startsWith("http://") || uri.startsWith("https://");
+	}
+
+	private String formatTags(AddBookmarkRequest request) {
+		return request.getTags().replace(" ", ", ");
 	}
 
 	private void sendInvalidUriMessage(StreamObserver<AddBookmarkResponse> responseObserver) {

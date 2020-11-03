@@ -1,4 +1,4 @@
-package com.revdebug.grpc.server;
+package com.revdebug.grpc.server.model;
 
 /**
  * Created by Łukasz Rejment

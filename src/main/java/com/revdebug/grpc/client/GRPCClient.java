@@ -8,6 +8,7 @@ import io.grpc.ManagedChannelBuilder;
 import com.revdebug.grpc.AddBookmarkServiceGrpc;
 import com.revdebug.grpc.AddBookmarkRequest;
 import com.revdebug.grpc.AddBookmarkResponse;
+import com.revdebug.grpc.common.HostProperties;
 
 /**
  * Created by Lukasz Rejment
@@ -15,8 +16,6 @@ import com.revdebug.grpc.AddBookmarkResponse;
 
 public class GRPCClient {
 
-	private static final String IP_ADDRESS = "localhost";
-	private static final int PORT = 8080;
 	private static final String EXIT_COMMAND = "exit";
 	private static final String INITIAL_MESSAGE = "Enter 'exit' to finish adding bookmarks";
 	private static final String ADD_BOOKMARK_COMMAND = "add-bookmark";
@@ -47,7 +46,7 @@ public class GRPCClient {
 	}
 
 	private static void sendMessage(String uri, String tags) {
-		ManagedChannel channel = ManagedChannelBuilder.forAddress(IP_ADDRESS, PORT)
+		ManagedChannel channel = ManagedChannelBuilder.forAddress(HostProperties.IP_ADDRESS, HostProperties.PORT)
 				.usePlaintext()
 				.build();
 

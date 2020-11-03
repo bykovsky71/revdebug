@@ -1,6 +1,8 @@
-package com.revdebug.grpc.server;
+package com.revdebug.grpc.server.utils;
 
 import java.io.*;
+
+import com.revdebug.grpc.server.model.Bookmark;
 
 /**
  * Created by Łukasz Rejment
